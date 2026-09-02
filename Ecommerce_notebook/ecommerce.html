@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>E-Commerce AI Review</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 25px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 7px 0 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .search-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        select,
+        input {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .product-select {
+            flex: 1;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #111827;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #374151;
+        }
+
+        .product-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .product-info {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .rating-overview {
+            margin-top: 25px;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+
+        .rating-label {
+            width: 35px;
+        }
+
+        .rating-bar {
+            flex: 1;
+            height: 9px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .rating-fill {
+            height: 100%;
+            background: #f59e0b;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .review {
+            border-top: 1px solid #e5e7eb;
+            padding: 20px 0;
+        }
+
+        .review:first-child {
+            border-top: none;
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stars {
+            color: #f59e0b;
+            font-size: 18px;
+        }
+
+        .review-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .review-text {
+            line-height: 1.6;
+            color: #475569;
+        }
+
+        .review-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge-recommended {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-not {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .ai-result {
+            display: none;
+            margin-top: 15px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .ai-result h3 {
+            margin-top: 0;
+        }
+
+        .probability-row {
+            margin-top: 10px;
+        }
+
+        .probability-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .probability-bar {
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            height: 100%;
+        }
+
+        .recommended-fill {
+            background: #22c55e;
+        }
+
+        .not-fill {
+            background: #ef4444;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 9px 13px;
+            border-radius: 7px;
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .pagination .active {
+            background: #111827;
+            color: white;
+        }
+
+        @media (max-width: 800px) {
+
+            .product-info,
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .search-area {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>🛍️ E-COMMERCE AI</h1>
+
+    <p>
+        Khám phá sản phẩm và phân tích đánh giá khách hàng
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- Product selection -->
+
+    <div class="card">
+
+        <h2>Chọn sản phẩm</h2>
+
+        <form method="GET"
+              action="/">
+
+            <div class="search-area">
+
+                <select
+                    class="product-select"
+                    name="product_id"
+                    required>
+
+                    <option value="">
+                        -- Chọn sản phẩm --
+                    </option>
+
+                    {% for product in products %}
+
+                    <option
+                        value="{{ product['Clothing ID'] }}"
+                        {% if product_id == product['Clothing ID'] %}
+                        selected
+                        {% endif %}>
+
+                        Clothing ID {{ product['Clothing ID'] }}
+                        -
+                        {{ product['Class Name'] or 'Unknown' }}
+
+                        {% if product['Department Name'] %}
+                        ({{ product['Department Name'] }})
+                        {% endif %}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <button
+                    class="btn-primary"
+                    type="submit">
+
+                    Xem sản phẩm
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    {% if selected_product is not none and stats is not none %}
+
+
+    <!-- Product information -->
+
+    <div class="card">
+
+        <div class="product-title">
+
+            👗 Clothing ID
+            {{ selected_product['Clothing ID'] }}
+
+        </div>
+
+
+        <div class="product-info">
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    Division
+                </div>
+
+                <div class="info-value">
+                    {{ selected_product['Division Name'] or 'N/A' }}
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    Department
+                </div>
+
+                <div class="info-value">
+                    {{ selected_product['Department Name'] or 'N/A' }}
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    Class
+                </div>
+
+                <div class="info-value">
+                    {{ selected_product['Class Name'] or 'N/A' }}
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    Tổng đánh giá
+                </div>
+
+                <div class="info-value">
+                    {{ stats['total_reviews'] }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat-box">
+
+                <div class="stat-number">
+                    ⭐ {{ stats['average_rating'] }}
+                </div>
+
+                <div class="stat-label">
+                    Rating trung bình
+                </div>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <div class="stat-number">
+                    {{ stats['recommended_rate'] }}%
+                </div>
+
+                <div class="stat-label">
+                    Khách hàng đề xuất
+                </div>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <div class="stat-number">
+                    {{ stats['not_recommended_rate'] }}%
+                </div>
+
+                <div class="stat-label">
+                    Không đề xuất
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Rating distribution -->
+
+        <div class="rating-overview">
+
+            <h3>Phân bố đánh giá</h3>
+
+            {% for rating in [5,4,3,2,1] %}
+
+            {% set count = stats['rating_counts'][rating] %}
+
+            {% if stats['total_reviews'] > 0 %}
+
+                {% set percentage =
+                    (count / stats['total_reviews'] * 100)
+                %}
+
+            {% else %}
+
+                {% set percentage = 0 %}
+
+            {% endif %}
+
+
+            <div class="rating-row">
+
+                <div class="rating-label">
+                    {{ rating }}★
+                </div>
+
+                <div class="rating-bar">
+
+                    <div
+                        class="rating-fill"
+                        style="width: {{ percentage }}%">
+                    </div>
+
+                </div>
+
+                <div>
+                    {{ count }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Filters -->
+
+    <div class="card">
+
+        <form method="GET"
+              action="/">
+
+            <input
+                type="hidden"
+                name="product_id"
+                value="{{ product_id }}">
+
+            <div class="filters">
+
+                <select name="rating">
+
+                    <option value="all"
+                        {% if rating_filter == 'all' %}
+                        selected
+                        {% endif %}>
+
+                        Tất cả rating
+
+                    </option>
+
+                    {% for r in [5,4,3,2,1] %}
+
+                    <option
+                        value="{{ r }}"
+                        {% if rating_filter == r|string %}
+                        selected
+                        {% endif %}>
+
+                        {{ r }} sao
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <select name="recommend">
+
+                    <option value="all"
+                        {% if recommend_filter == 'all' %}
+                        selected
+                        {% endif %}>
+
+                        Tất cả
+
+                    </option>
+
+                    <option
+                        value="recommended"
+                        {% if recommend_filter == 'recommended' %}
+                        selected
+                        {% endif %}>
+
+                        Được đề xuất
+
+                    </option>
+
+                    <option
+                        value="not_recommended"
+                        {% if recommend_filter == 'not_recommended' %}
+                        selected
+                        {% endif %}>
+
+                        Không đề xuất
+
+                    </option>
+
+                </select>
+
+
+                <select name="sort">
+
+                    <option value="newest"
+                        {% if sort_option == 'newest' %}
+                        selected
+                        {% endif %}>
+
+                        Mới nhất
+
+                    </option>
+
+                    <option value="rating_high"
+                        {% if sort_option == 'rating_high' %}
+                        selected
+                        {% endif %}>
+
+                        Rating cao → thấp
+
+                    </option>
+
+                    <option value="rating_low"
+                        {% if sort_option == 'rating_low' %}
+                        selected
+                        {% endif %}>
+
+                        Rating thấp → cao
+
+                    </option>
+
+                    <option value="helpful"
+                        {% if sort_option == 'helpful' %}
+                        selected
+                        {% endif %}>
+
+                        Hữu ích nhất
+
+                    </option>
+
+                </select>
+
+
+                <button
+                    class="btn-primary"
+                    type="submit">
+
+                    Lọc đánh giá
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- Reviews -->
+
+    <div class="card">
+
+        <div class="reviews-header">
+
+            <h2>
+                💬 Đánh giá khách hàng
+            </h2>
+
+            <span>
+                {{ total_reviews }} đánh giá
+            </span>
+
+        </div>
+
+
+        {% if reviews %}
+
+            {% for review in reviews %}
+
+            <div class="review">
+
+                <div class="review-top">
+
+                    <div class="stars">
+
+                        {% for i in range(review['rating']) %}
+                            ★
+                        {% endfor %}
+
+                        {% for i in range(5 - review['rating']) %}
+                            ☆
+                        {% endfor %}
+
+                    </div>
+
+
+                    {% if review['recommended'] == 1 %}
+
+                    <span class="badge badge-recommended">
+                        ✓ Khách hàng đề xuất
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge badge-not">
+                        ✕ Không đề xuất
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="review-title">
+
+                    {% if review['title'] %}
+
+                        {{ review['title'] }}
+
+                    {% else %}
+
+                        Không có tiêu đề
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="review-text">
+
+                    {% if review['review_text'] %}
+
+                        {{ review['review_text'] }}
+
+                    {% else %}
+
+                        Không có nội dung đánh giá.
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="review-meta">
+
+                    <span>
+                        👤 Tuổi: {{ review['age'] }}
+                    </span>
+
+                    <span>
+                        👍 {{ review['positive_feedback'] }}
+                        người thấy hữu ích
+                    </span>
+
+                </div>
+
+
+                <div style="margin-top: 15px;">
+
+                    <button
+                        class="btn-primary"
+                        onclick="analyzeReview({{ review['review_id'] }}, this)">
+
+                        🔮 Phân tích bằng AI
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="ai-result"
+                    id="result-{{ review['review_id'] }}">
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+            <!-- Pagination -->
+
+            {% if total_pages > 1 %}
+
+            <div class="pagination">
+
+                {% for p in range(1, total_pages + 1) %}
+
+                <a
+                    href="/?product_id={{ product_id }}&rating={{ rating_filter }}&recommend={{ recommend_filter }}&sort={{ sort_option }}&page={{ p }}"
+                    class="{% if p == page %}active{% endif %}">
+
+                    {{ p }}
+
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+
+        {% else %}
+
+            <p>
+                Không tìm thấy đánh giá phù hợp.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+async function analyzeReview(reviewId, button) {
+
+    const resultBox =
+        document.getElementById(
+            "result-" + reviewId
+        );
+
+    button.disabled = true;
+
+    button.innerText =
+        "⏳ Đang phân tích...";
+
+
+    try {
+
+        const response = await fetch(
+            "/predict-review",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    review_id: reviewId
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Không thể phân tích"
+            );
+
+        }
+
+
+        resultBox.style.display = "block";
+
+
+        const recommended =
+            data.recommended;
+
+        const notRecommended =
+            data.not_recommended;
+
+
+        resultBox.innerHTML = `
+
+            <h3>
+                🔮 Kết quả phân tích
+            </h3>
+
+            <p style="
+                font-size: 18px;
+                font-weight: bold;
+            ">
+
+                ${
+                    data.prediction === 1
+                    ? "✓ CÓ KHẢ NĂNG ĐỀ XUẤT"
+                    : "✕ CÓ KHẢ NĂNG KHÔNG ĐỀ XUẤT"
+                }
+
+            </p>
+
+
+            <div class="probability-row">
+
+                <div class="probability-label">
+
+                    <span>
+                        Khả năng đề xuất
+                    </span>
+
+                    <strong>
+                        ${recommended}%
+                    </strong>
+
+                </div>
+
+
+                <div class="probability-bar">
+
+                    <div
+                        class="probability-fill recommended-fill"
+                        style="
+                            width: ${recommended}%;
+                        ">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="probability-row">
+
+                <div class="probability-label">
+
+                    <span>
+                        Khả năng không đề xuất
+                    </span>
+
+                    <strong>
+                        ${notRecommended}%
+                    </strong>
+
+                </div>
+
+
+                <div class="probability-bar">
+
+                    <div
+                        class="probability-fill not-fill"
+                        style="
+                            width: ${notRecommended}%;
+                        ">
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+    } catch (error) {
+
+        resultBox.style.display =
+            "block";
+
+        resultBox.innerHTML = `
+
+            <p style="color: #dc2626;">
+                ❌ ${error.message}
+            </p>
+
+        `;
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerText =
+        "🔮 Phân tích bằng AI";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

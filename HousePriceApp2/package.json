@@ -1,0 +1,22 @@
+{
+  "name": "housepriceapp2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@react-native-picker/picker": "2.11.1",
+    "expo": "^54.0.37",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
+  }
+}

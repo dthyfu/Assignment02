@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Intelligent System Chatbot</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8fafc
+                );
+
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .container {
+            width: 760px;
+            max-width: 100%;
+
+            height: 720px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(0, 0, 0, 0.12);
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .header {
+            padding: 20px 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #6366f1
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+
+        .bot-icon {
+            width: 48px;
+            height: 48px;
+
+            background: white;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+
+        .header-subtitle {
+            font-size: 13px;
+
+            opacity: 0.9;
+        }
+
+
+        .clear-button {
+            background: rgba(255, 255, 255, 0.15);
+
+            color: white;
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.3);
+
+            padding: 9px 13px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+        }
+
+
+        .clear-button:hover {
+            background:
+                rgba(255, 255, 255, 0.25);
+        }
+
+
+        /* =========================================
+           CHAT AREA
+        ========================================= */
+
+        #chat {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 25px;
+
+            background: #f8fafc;
+        }
+
+
+        #chat::-webkit-scrollbar {
+            width: 7px;
+        }
+
+
+        #chat::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================================
+           WELCOME
+        ========================================= */
+
+        .welcome {
+            text-align: center;
+
+            padding: 35px 20px 20px;
+
+            color: #475569;
+        }
+
+
+        .welcome-icon {
+            font-size: 42px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .welcome-title {
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: #1e293b;
+
+            margin-bottom: 8px;
+        }
+
+
+        .welcome-text {
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            max-width: 500px;
+
+            margin: auto;
+        }
+
+
+        /* =========================================
+           MESSAGE
+        ========================================= */
+
+        .message-row {
+            display: flex;
+
+            margin-bottom: 18px;
+
+            gap: 10px;
+        }
+
+
+        .message-row.user {
+            justify-content: flex-end;
+        }
+
+
+        .message-row.bot {
+            justify-content: flex-start;
+        }
+
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+        }
+
+
+        .bot-avatar {
+            background: #e0e7ff;
+        }
+
+
+        .user-avatar {
+            background: #ddd6fe;
+        }
+
+
+        .bubble {
+            max-width: 75%;
+
+            padding: 12px 16px;
+
+            border-radius: 16px;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            word-wrap: break-word;
+
+            white-space: normal;
+        }
+
+
+        .bot-bubble {
+            background: white;
+
+            color: #1e293b;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-top-left-radius: 5px;
+
+            box-shadow:
+                0 2px 7px
+                rgba(0, 0, 0, 0.04);
+        }
+
+
+        .user-bubble {
+            background: #4f46e5;
+
+            color: white;
+
+            border-top-right-radius: 5px;
+        }
+
+
+        .bubble strong {
+            font-weight: 700;
+        }
+
+
+        .bubble ul {
+            margin: 7px 0;
+
+            padding-left: 20px;
+        }
+
+
+        .bubble li {
+            margin-bottom: 4px;
+        }
+
+
+        /* =========================================
+           TYPING
+        ========================================= */
+
+        .typing {
+            display: flex;
+
+            align-items: center;
+
+            gap: 4px;
+
+            padding: 4px 2px;
+        }
+
+
+        .typing span {
+            width: 7px;
+            height: 7px;
+
+            background: #94a3b8;
+
+            border-radius: 50%;
+
+            animation:
+                typing 1.2s infinite;
+        }
+
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+
+
+        /* =========================================
+           SUGGESTIONS
+        ========================================= */
+
+        .suggestions {
+            padding:
+                10px 22px 8px;
+
+            background: white;
+
+            border-top:
+                1px solid #e2e8f0;
+        }
+
+
+        .suggestion-title {
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-bottom: 8px;
+        }
+
+
+        .suggestion-list {
+            display: flex;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .suggestion {
+            border:
+                1px solid #c7d2fe;
+
+            background: #eef2ff;
+
+            color: #4338ca;
+
+            border-radius: 20px;
+
+            padding: 7px 12px;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .suggestion:hover {
+            background: #e0e7ff;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =========================================
+           INPUT AREA
+        ========================================= */
+
+        .input-area {
+            padding: 15px 20px 18px;
+
+            background: white;
+
+            border-top:
+                1px solid #e2e8f0;
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        #question {
+            flex: 1;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 13px;
+
+            padding: 13px 16px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s;
+
+            background: #f8fafc;
+        }
+
+
+        #question:focus {
+            border-color: #6366f1;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99, 102, 241, 0.1);
+        }
+
+
+        #question:disabled {
+            opacity: 0.6;
+        }
+
+
+        .send-button {
+            width: 50px;
+            height: 48px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background: #4f46e5;
+
+            color: white;
+
+            font-size: 19px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .send-button:hover {
+            background: #4338ca;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .send-button:disabled {
+            background: #a5b4fc;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 0;
+            }
+
+
+            .container {
+                width: 100%;
+
+                height: 100vh;
+
+                border-radius: 0;
+            }
+
+
+            .header {
+                padding: 15px 17px;
+            }
+
+
+            .bot-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+
+            .header-title {
+                font-size: 17px;
+            }
+
+
+            .header-subtitle {
+                font-size: 11px;
+            }
+
+
+            .clear-button {
+                padding: 7px 9px;
+
+                font-size: 11px;
+            }
+
+
+            #chat {
+                padding: 18px 14px;
+            }
+
+
+            .bubble {
+                max-width: 84%;
+
+                font-size: 13px;
+            }
+
+
+            .suggestions {
+                padding:
+                    8px 12px;
+            }
+
+
+            .input-area {
+                padding:
+                    10px 12px 12px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="bot-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <div class="header-title">
+                    Intelligent System Chatbot
+                </div>
+
+                <div class="header-subtitle">
+                    Knowledge Graph • ML • REST API
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="clear-button"
+            onclick="clearChat()"
+        >
+            Xóa chat
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         CHAT
+    ====================================== -->
+
+    <div id="chat">
+
+        <div
+            class="welcome"
+            id="welcome"
+        >
+
+            <div class="welcome-icon">
+                🧠
+            </div>
+
+            <div class="welcome-title">
+                Xin chào!
+            </div>
+
+            <div class="welcome-text">
+                Tôi có thể hỗ trợ thông tin về
+                Diabetes, dự đoán giá nhà và
+                phân tích sản phẩm E-commerce.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         SUGGESTIONS
+    ====================================== -->
+
+    <div class="suggestions">
+
+        <div class="suggestion-title">
+            Gợi ý câu hỏi
+        </div>
+
+
+        <div class="suggestion-list">
+
+            <button
+                class="suggestion"
+                onclick="useSuggestion(
+                    'Bệnh tiểu đường nên ăn gì?'
+                )"
+            >
+                🩺 Tiểu đường nên ăn gì?
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="useSuggestion(
+                    'Dự đoán giá nhà'
+                )"
+            >
+                🏠 Dự đoán giá nhà
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="useSuggestion(
+                    'Sản phẩm nào có rating cao nhất?'
+                )"
+            >
+                ⭐ Rating cao nhất
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="useSuggestion(
+                    'Sản phẩm nào có nhiều review nhất?'
+                )"
+            >
+                💬 Nhiều review nhất
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="useSuggestion(
+                    'Có những category nào?'
+                )"
+            >
+                🛍 Category
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         INPUT
+    ====================================== -->
+
+    <div class="input-area">
+
+        <input
+            type="text"
+            id="question"
+            placeholder="Nhập câu hỏi..."
+            autocomplete="off"
+        >
+
+
+        <button
+            class="send-button"
+            id="sendButton"
+            onclick="sendQuestion()"
+        >
+            ➤
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let sessionId = null;
+
+
+    // =========================================
+    // ESCAPE HTML
+    // =========================================
+
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent = text;
+
+        return div.innerHTML;
+    }
+
+
+    // =========================================
+    // FORMAT BOT MESSAGE
+    // =========================================
+
+    function formatBotMessage(text) {
+
+        let html =
+            escapeHtml(text);
+
+
+        // Bold **text**
+        html = html.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+
+        // Convert new lines
+        html = html.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+        return html;
+    }
+
+
+    // =========================================
+    // ADD USER MESSAGE
+    // =========================================
+
+    function addUserMessage(text) {
+
+        const chat =
+            document.getElementById("chat");
+
+
+        const welcome =
+            document.getElementById("welcome");
+
+
+        if (welcome) {
+
+            welcome.remove();
+
+        }
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "message-row user";
+
+
+        row.innerHTML = `
+
+            <div class="bubble user-bubble">
+                ${escapeHtml(text)}
+            </div>
+
+            <div class="avatar user-avatar">
+                👤
+            </div>
+
+        `;
+
+
+        chat.appendChild(row);
+
+        scrollToBottom();
+    }
+
+
+    // =========================================
+    // ADD BOT MESSAGE
+    // =========================================
+
+    function addBotMessage(text) {
+
+        const chat =
+            document.getElementById("chat");
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "message-row bot";
+
+
+        row.innerHTML = `
+
+            <div class="avatar bot-avatar">
+                🤖
+            </div>
+
+            <div class="bubble bot-bubble">
+                ${formatBotMessage(text)}
+            </div>
+
+        `;
+
+
+        chat.appendChild(row);
+
+        scrollToBottom();
+    }
+
+
+    // =========================================
+    // TYPING
+    // =========================================
+
+    function showTyping() {
+
+        const chat =
+            document.getElementById("chat");
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "message-row bot";
+
+        row.id =
+            "typingMessage";
+
+
+        row.innerHTML = `
+
+            <div class="avatar bot-avatar">
+                🤖
+            </div>
+
+            <div class="bubble bot-bubble">
+
+                <div class="typing">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        chat.appendChild(row);
+
+        scrollToBottom();
+    }
+
+
+    // =========================================
+    // REMOVE TYPING
+    // =========================================
+
+    function removeTyping() {
+
+        const typing =
+            document.getElementById(
+                "typingMessage"
+            );
+
+
+        if (typing) {
+
+            typing.remove();
+
+        }
+    }
+
+
+    // =========================================
+    // SCROLL
+    // =========================================
+
+    function scrollToBottom() {
+
+        const chat =
+            document.getElementById("chat");
+
+
+        chat.scrollTop =
+            chat.scrollHeight;
+    }
+
+
+    // =========================================
+    // SEND QUESTION
+    // =========================================
+
+    async function sendQuestion() {
+
+        const input =
+            document.getElementById("question");
+
+        const button =
+            document.getElementById("sendButton");
+
+
+        const question =
+            input.value.trim();
+
+
+        if (!question) {
+
+            return;
+
+        }
+
+
+        addUserMessage(question);
+
+
+        input.value = "";
+
+        input.disabled = true;
+
+        button.disabled = true;
+
+
+        showTyping();
+
+
+        try {
+
+            const body = {
+                question: question
+            };
+
+
+            if (sessionId) {
+
+                body.session_id =
+                    sessionId;
+
+            }
+
+
+            const response =
+                await fetch(
+                    "/chat",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(body)
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            removeTyping();
+
+
+            if (data.session_id) {
+
+                sessionId =
+                    data.session_id;
+
+            }
+
+
+            if (!response.ok) {
+
+                addBotMessage(
+                    data.error ||
+                    "Có lỗi xảy ra."
+                );
+
+            } else {
+
+                addBotMessage(
+                    data.answer ||
+                    "Chatbot không có câu trả lời."
+                );
+
+            }
+
+
+        } catch (error) {
+
+            removeTyping();
+
+
+            addBotMessage(
+                "Không thể kết nối đến Chatbot API."
+            );
+
+            console.error(error);
+
+        }
+
+
+        input.disabled = false;
+
+        button.disabled = false;
+
+        input.focus();
+
+    }
+
+
+    // =========================================
+    // SUGGESTION
+    // =========================================
+
+    function useSuggestion(text) {
+
+        const input =
+            document.getElementById("question");
+
+
+        input.value = text;
+
+        input.focus();
+
+    }
+
+
+    // =========================================
+    // CLEAR CHAT
+    // =========================================
+
+    function clearChat() {
+
+        const chat =
+            document.getElementById("chat");
+
+
+        chat.innerHTML = `
+
+            <div
+                class="welcome"
+                id="welcome"
+            >
+
+                <div class="welcome-icon">
+                    🧠
+                </div>
+
+                <div class="welcome-title">
+                    Xin chào!
+                </div>
+
+                <div class="welcome-text">
+                    Tôi có thể hỗ trợ thông tin về
+                    Diabetes, dự đoán giá nhà và
+                    phân tích sản phẩm E-commerce.
+                </div>
+
+            </div>
+
+        `;
+
+
+        sessionId = null;
+
+    }
+
+
+    // =========================================
+    // ENTER TO SEND
+    // =========================================
+
+    document
+        .getElementById("question")
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                    && !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    sendQuestion();
+
+                }
+
+            }
+        );
+
+</script>
+
+</body>
+</html>
